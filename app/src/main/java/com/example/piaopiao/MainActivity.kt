@@ -3,6 +3,7 @@ package com.example.piaopiao
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -23,14 +24,18 @@ class MainActivity : AppCompatActivity() {
 
     private val stringList = arrayOf("哈哈", "嘿嘿", "77", "88")
 
+    /**
+     * 2时间戳
+     */
+    private val startTime = 1628870400000
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        actionBar?.hide()
+        supportActionBar?.hide()
+        StatusBarHelper.setStatusBarHint(this, Color.parseColor("#f3f3f3f3"), true)
         bubbleContainView = findViewById(R.id.rootContainer)
-        testTv = findViewById(R.id.tv_test)
-        testTv.setOnClickListener {
-            initView()
-        }
     }
 
     private fun randomLayoutParams(): RelativeLayout.LayoutParams {
@@ -40,8 +45,14 @@ class MainActivity : AppCompatActivity() {
         return layoutParams
     }
 
+    override fun onResume() {
+        super.onResume()
+        initView()
+    }
+
     private fun randomY(): Int {
-        return Random(System.currentTimeMillis()).nextInt(0, 150)
+        val hAdd = StatusBarHelper.getStatusBarHeight(this)
+        return Random(System.currentTimeMillis()).nextInt(hAdd, 150 + hAdd)
     }
 
     private fun initView() {
