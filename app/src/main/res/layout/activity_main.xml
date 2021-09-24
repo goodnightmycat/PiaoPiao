@@ -29,6 +29,71 @@
             android:layout_marginHorizontal="50dp"
             android:background="@drawable/bg_calendar_bottom"
             app:layout_constraintTop_toBottomOf="@id/calendarTopIv" />
+
+        <ImageView
+            android:id="@+id/cat"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/cat"
+            app:layout_constraintBottom_toBottomOf="@id/calendarTopIv"
+            app:layout_constraintStart_toStartOf="@id/calendarTopIv"
+            app:layout_constraintTop_toTopOf="@id/calendarTopIv" />
+
+        <ImageView
+            android:id="@+id/sheep"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/sheep"
+            app:layout_constraintBottom_toBottomOf="@id/cat"
+            app:layout_constraintEnd_toEndOf="@id/calendarTopIv"
+            app:layout_constraintTop_toTopOf="@id/cat" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="刘晓思和范晓阳"
+            app:layout_constraintBottom_toBottomOf="@id/cat"
+            app:layout_constraintEnd_toStartOf="@id/sheep"
+            app:layout_constraintStart_toEndOf="@id/cat"
+            app:layout_constraintTop_toTopOf="@id/cat" />
+
+        <TextView
+            android:id="@+id/tv_together"
+            android:text="在一起已经"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/calendarBottomIv"
+            app:layout_constraintStart_toStartOf="@id/calendarBottomIv"
+            app:layout_constraintTop_toTopOf="@id/calendarBottomIv" />
+
+        <TextView
+            android:id="@+id/tv_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="50sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_begin"
+            app:layout_constraintEnd_toEndOf="@id/calendarBottomIv"
+            app:layout_constraintStart_toStartOf="@id/calendarBottomIv"
+            app:layout_constraintTop_toBottomOf="@id/tv_together" />
+
+        <TextView
+            android:id="@+id/tv_begin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textSize="17sp"
+            android:text="开始于：2021年8月14日（七夕）"
+            app:layout_constraintBottom_toBottomOf="@id/calendarBottomIv"
+            app:layout_constraintEnd_toEndOf="@id/calendarBottomIv"
+            app:layout_constraintStart_toStartOf="@id/calendarBottomIv" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>
