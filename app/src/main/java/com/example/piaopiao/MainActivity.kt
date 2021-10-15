@@ -23,8 +23,33 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dayTv: TextView
 
     private val stringList =
-        arrayOf("预备备", "嘿嘿", "可爱死咯", "不可以吗", "高贵得很", "等下下", "你要道理还是要女票", "哼", "坏蛋","男票","阿票","票票","想男票了","男票困困","男票抱抱",
-            "男票亲亲","吃饱饱","分什么你我","男票～我好喜欢你呀","早安男票","男票我醒了","男票我想你了","我最～喜欢男票了","晚安男票","男票亲我")
+        arrayOf(
+            "预备备",
+            "嘿嘿",
+            "可爱死咯",
+            "不可以吗",
+            "高贵得很",
+            "等下下",
+            "你要道理还是要女票",
+            "哼",
+            "坏蛋",
+            "男票",
+            "阿票",
+            "票票",
+            "想男票了",
+            "男票困困",
+            "男票抱抱",
+            "男票亲亲",
+            "吃饱饱",
+            "分什么你我",
+            "男票～我好喜欢你呀",
+            "早安男票",
+            "男票我醒了",
+            "男票我想你了",
+            "我最～喜欢男票了",
+            "晚安男票",
+            "男票亲我"
+        )
 
     /**
      * 2时间戳
@@ -44,13 +69,14 @@ class MainActivity : AppCompatActivity() {
         dayTv = findViewById(R.id.tv_days)
         colorBlue = this.resources.getColor(R.color.my_blue)
         colorPink = this.resources.getColor(R.color.my_pink)
+        showList.addAll(stringList)
         initView()
     }
 
     override fun onResume() {
         super.onResume()
-        val days = (System.currentTimeMillis() - startTime)/(1000*60*60*24)
-        dayTv.text="$days"
+        val days = (System.currentTimeMillis() - startTime) / (1000 * 60 * 60 * 24)
+        dayTv.text = "$days"
     }
 
     private fun randomLayoutParams(): RelativeLayout.LayoutParams {
@@ -71,16 +97,32 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
         GlobalScope.launch(Dispatchers.Main) {
             repeat(1000) {
-                repeat(stringList.size) {
-                    delay(2000)
-                    val textView = TextView(this@MainActivity)
-                    textView.setTextColor(randomColor())
-                    textView.text = stringList[it]
-                    startBubble(textView)
-                }
+                delay(2000)
+                val textView = TextView(this@MainActivity)
+                textView.setTextColor(randomColor())
+                textView.text = randomText()
+                startBubble(textView)
             }
         }
+    }
 
+    val showList = ArrayList<String>()
+
+    private fun randomText(): String {
+        var result = ""
+        while (true) {
+            val tempResult =
+                stringList[Random(System.currentTimeMillis()).nextInt(0, stringList.size)]
+            if (showList.contains(tempResult)) {
+                showList.remove(tempResult)
+                result = tempResult
+                break
+            }
+            if (showList.size == 0) {
+                showList.addAll(stringList)
+            }
+        }
+        return result
     }
 
     private fun randomColor(): Int {
