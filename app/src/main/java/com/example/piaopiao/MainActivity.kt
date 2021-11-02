@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.LinearInterpolator
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.RelativeLayout.ALIGN_PARENT_END
 import android.widget.TextView
@@ -54,10 +55,12 @@ class MainActivity : AppCompatActivity() {
     /**
      * 2时间戳
      */
-    private val startTime = 1628870400000
+    private val startTime = 1628784001000
 
     var colorBlue: Int = 0
     var colorPink: Int = 0
+
+    private lateinit var sheepIv:ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +73,14 @@ class MainActivity : AppCompatActivity() {
         colorBlue = this.resources.getColor(R.color.my_blue)
         colorPink = this.resources.getColor(R.color.my_pink)
         showList.addAll(stringList)
+        sheepIv=findViewById(R.id.sheep)
+        sheepIv.setOnClickListener {
+//            val layoutParams = RelativeLayout.LayoutParams(
+//                RelativeLayout.LayoutParams.MATCH_PARENT,
+//                RelativeLayout.LayoutParams.MATCH_PARENT
+//            )
+//            bubbleContainView.addView(FireworkView(this),layoutParams)
+        }
         initView()
     }
 
