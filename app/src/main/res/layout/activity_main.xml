@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginHorizontal="50dp"
-            android:layout_marginTop="250dp"
+            android:layout_marginTop="200dp"
             android:background="@drawable/bg_calendar_top"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,11 +52,11 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:textSize="18sp"
-            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="刘晓思和范晓阳"
+            android:textColor="@color/white"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@id/cat"
             app:layout_constraintEnd_toStartOf="@id/sheep"
             app:layout_constraintStart_toEndOf="@id/cat"
@@ -64,10 +64,10 @@
 
         <TextView
             android:id="@+id/tv_together"
-            android:text="在一起已经"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:text="在一起已经"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@id/calendarBottomIv"
             app:layout_constraintStart_toStartOf="@id/calendarBottomIv"
@@ -88,11 +88,53 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:textSize="17sp"
             android:text="开始于：2021年8月14日（七夕）"
+            android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="@id/calendarBottomIv"
             app:layout_constraintEnd_toEndOf="@id/calendarBottomIv"
             app:layout_constraintStart_toStartOf="@id/calendarBottomIv" />
+
+        <ImageView
+            android:id="@+id/tree1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/tree_line"
+            android:layout_width="80dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintDimensionRatio="128:112"
+            android:layout_height="0dp"/>
+
+        <ImageView
+            android:id="@+id/tree2"
+            android:layout_width="200dp"
+            android:layout_height="0dp"
+            android:src="@drawable/tree_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="128:112"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tree1" />
+
+        <ImageView
+            android:id="@+id/tree4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/tree_line"
+            app:layout_constraintDimensionRatio="128:112"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="20dp"
+            android:layout_width="80dp"
+            android:layout_height="0dp"/>
+
+        <ImageView
+            android:id="@+id/socks1"
+            android:rotation="-30"
+            app:layout_constraintTop_toTopOf="@id/tree2"
+            android:layout_marginTop="60dp"
+            android:layout_marginStart="120dp"
+            android:src="@drawable/socks2"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="@id/tree2"
+            android:layout_width="20dp"
+            android:layout_height="0dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
