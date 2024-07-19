@@ -19,6 +19,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+/**
+ * Use JDK 11
+ */
 class MainActivity : AppCompatActivity() {
     private lateinit var bubbleContainView: RelativeLayout
     private lateinit var dayTv: TextView
