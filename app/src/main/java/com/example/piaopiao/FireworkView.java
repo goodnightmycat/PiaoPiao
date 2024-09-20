@@ -153,7 +153,7 @@ public class FireworkView extends View {
                 for (Particle particle : particles) {
                     if (particle.life > 0) {
                         paint.setColor(particle.color);
-                        canvas.drawCircle(particle.x, particle.y, particle.size, paint);
+                        particle.draw(canvas, paint);
                     }
                 }
             }
@@ -168,34 +168,42 @@ public class FireworkView extends View {
         int color;
         int life;
         int initialLife;  // 粒子的初始寿命
-        static final float GRAVITY = 0.08f; // 重力加速度
+        float gravity = 0.05f;  // 重力加速度因子，控制下落的速度
 
-        Particle(float startX, float startY, float size, int color, int life) {
-            this.x = startX;
-            this.y = startY;
-            this.size = size;
-            this.color = color;
-            this.life = life;
-            this.initialLife = life;  // 保存初始寿命
-            this.speedX = 0;
-            this.speedY = 0;
-        }
+        // 记录粒子历史轨迹点
+        List<float[]> trailPoints;  // 保存粒子的历史位置
+        int maxTrailLength = 20;    // 拖尾的最大长度
 
         Particle(float startX, float startY, float speed, float angle, int color) {
             this.x = startX;
             this.y = startY;
             this.speedX = (float) (speed * Math.cos(angle));
             this.speedY = (float) (speed * Math.sin(angle));
-            this.size = 3;
+            this.size = 10;  // 粒子初始大小
             this.color = color;
-            this.life = 200;  // 粒子的寿命
+            this.life = 100;  // 粒子的寿命
             this.initialLife = life;  // 保存初始寿命
+            this.trailPoints = new ArrayList<>();  // 初始化拖尾轨迹
         }
 
         void update() {
+            // 更新位置前，记录当前坐标
+            trailPoints.add(new float[]{x, y});
+
+            // 如果拖尾点数量超过最大长度，移除最早的点
+            if (trailPoints.size() > maxTrailLength) {
+                trailPoints.remove(0);
+            }
+
+            // 水平速度逐渐衰减，模拟空气阻力
+            speedX *= 0.99;
+
+            // 垂直方向增加重力效果，使得粒子逐渐下落
+            speedY += gravity;
+
+            // 更新粒子的位置
             x += speedX;
             y += speedY;
-            speedY += GRAVITY; // 模拟重力作用
             life--;
 
             // 粒子逐渐减小
@@ -203,10 +211,31 @@ public class FireworkView extends View {
 
             // 根据寿命调整透明度
             int alpha = (int) (255 * ((float) life / initialLife));
-            alpha = Math.max(alpha, 0); // 确保alpha不为负值
             color = (color & 0x00FFFFFF) | (alpha << 24);  // 设置alpha通道
         }
+
+        void draw(Canvas canvas, Paint paint) {
+            // 绘制拖尾效果
+            int trailAlphaStep = 255 / maxTrailLength;  // 每段拖尾的透明度变化
+
+            for (int i = 0; i < trailPoints.size(); i++) {
+                // 根据历史点的顺序，逐渐减少透明度
+                int alpha = (int) (trailAlphaStep * i);
+                paint.setColor((color & 0x00FFFFFF) | (alpha << 24));
+
+                // 绘制历史点，半径逐渐变小，模拟拖尾效果
+                float[] point = trailPoints.get(i);
+//                float trailSize = size * (1f - (float) i / maxTrailLength);  // 尾迹逐渐变小
+                float trailSize = size * 0.8f;  // 尾迹大小固定
+                canvas.drawCircle(point[0], point[1], trailSize, paint);
+            }
+
+//            // 最后绘制当前的粒子位置
+//            paint.setColor(color);
+//            canvas.drawCircle(x, y, size * 0.5f, paint);
+        }
     }
+
 }
 
 

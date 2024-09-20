@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
@@ -23,43 +24,9 @@ import kotlin.random.Random
  * Use JDK 11
  */
 class MainActivity : AppCompatActivity() {
-    private lateinit var bubbleContainView: RelativeLayout
+    private lateinit var rootContainView: RelativeLayout
     private lateinit var dayTv: TextView
 
-    private val stringList =
-        arrayOf(
-            "预备备",
-            "嘿嘿",
-            "可爱死咯",
-            "不可以吗",
-            "高贵得很",
-            "等下下",
-            "你要道理还是要女票",
-            "哼",
-            "坏蛋",
-            "男票",
-            "阿票",
-            "票票",
-            "想男票了",
-            "男票困困",
-            "男票抱抱",
-            "男票亲亲",
-            "吃饱饱",
-            "分什么你我",
-            "男票～我好喜欢你呀",
-            "早安男票",
-            "男票我醒了",
-            "男票我想你了",
-            "我最～喜欢男票了",
-            "晚安男票",
-            "男票亲我",
-            "女票，你好好看啊",
-            "女票，我好想你啊",
-            "老婆，老婆，老婆，我爱你",
-            "老婆仔","老公仔"
-
-
-        )
 
     /**
      * 2时间戳
@@ -69,7 +36,8 @@ class MainActivity : AppCompatActivity() {
     var colorBlue: Int = 0
     var colorPink: Int = 0
 
-    private lateinit var sheepIv:ImageView
+    private lateinit var sheepIv: ImageView
+    private lateinit var catIv: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,15 +45,32 @@ class MainActivity : AppCompatActivity() {
         actionBar?.hide()
         supportActionBar?.hide()
         StatusBarHelper.setStatusBarHint(this, Color.parseColor("#f3f3f3f3"), true)
-        bubbleContainView = findViewById(R.id.rootContainer)
+        rootContainView = findViewById(R.id.rootContainer)
         dayTv = findViewById(R.id.tv_days)
         colorBlue = this.resources.getColor(R.color.my_blue)
         colorPink = this.resources.getColor(R.color.my_pink)
-        showList.addAll(stringList)
-        sheepIv=findViewById(R.id.sheep)
+        sheepIv = findViewById(R.id.sheep)
         sheepIv.setOnClickListener {
+            startFirework()
         }
-        initView()
+        catIv = findViewById(R.id.cat)
+        catIv.setOnClickListener {
+            initView()
+        }
+    }
+
+    private val fireworkView by lazy { FireworkView(this, null) }
+
+
+    private fun startFirework() {
+        rootContainView.removeView(fireworkView)
+        rootContainView.addView(
+            fireworkView,
+            ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        )
     }
 
     override fun onResume() {
@@ -105,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun randomImageLayoutParams(): RelativeLayout.LayoutParams {
-        val snowSize= Random(System.currentTimeMillis()).nextInt(10,90)
+        val snowSize = Random(System.currentTimeMillis()).nextInt(10, 90)
         val layoutParams = RelativeLayout.LayoutParams(
             snowSize,
             snowSize
@@ -120,7 +105,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun randomX(): Int {
-        return Random(System.currentTimeMillis()).nextInt(100, getScreenWidth(this)-100)
+        return Random(System.currentTimeMillis()).nextInt(100, screenWith - 100)
     }
 
     private fun initView() {
@@ -134,17 +119,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        GlobalScope.launch (Dispatchers.Main){
+        GlobalScope.launch(Dispatchers.Main) {
             repeat(Int.MAX_VALUE) {
-                delay(Random(System.currentTimeMillis()).nextLong(10,2000))
-                val imageView=ImageView(this@MainActivity)
+                delay(Random(System.currentTimeMillis()).nextLong(10, 2000))
+                val imageView = ImageView(this@MainActivity)
                 startSnow(imageView)
             }
         }
-        GlobalScope.launch (Dispatchers.Main){
+        GlobalScope.launch(Dispatchers.Main) {
             repeat(Int.MAX_VALUE) {
-                delay(Random(System.currentTimeMillis()).nextLong(10,2000))
-                val imageView=ImageView(this@MainActivity)
+                delay(Random(System.currentTimeMillis()).nextLong(10, 2000))
+                val imageView = ImageView(this@MainActivity)
                 startSnow(imageView)
             }
         }
@@ -156,14 +141,17 @@ class MainActivity : AppCompatActivity() {
         var result = ""
         while (true) {
             val tempResult =
-                stringList[Random(System.currentTimeMillis()).nextInt(0, stringList.size)]
+                DataHelper.stringList[Random(System.currentTimeMillis()).nextInt(
+                    0,
+                    DataHelper.stringList.size
+                )]
             if (showList.contains(tempResult)) {
                 showList.remove(tempResult)
                 result = tempResult
                 break
             }
             if (showList.size == 0) {
-                showList.addAll(stringList)
+                showList.addAll(DataHelper.stringList)
             }
         }
         return result
@@ -179,8 +167,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startBubble(view: TextView) {
-        bubbleContainView.addView(view, randomTextLayoutParams())
-        val translationX = getScreenWidth(this)
+        rootContainView.addView(view, randomTextLayoutParams())
+        val translationX = screenWith
         val animator =
             ObjectAnimator.ofFloat(view, "translationX", 0f + translationX / 2, (0f - translationX))
         animator.duration = 5000
@@ -192,7 +180,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(animation: Animator?) {
                 view.visibility = View.GONE
-                bubbleContainView.removeView(view)
+                rootContainView.removeView(view)
             }
 
             override fun onAnimationCancel(animation: Animator?) {
@@ -206,18 +194,19 @@ class MainActivity : AppCompatActivity() {
         })
         animator.start()
     }
-    val snowList= arrayListOf<Int>(R.drawable.snow1,R.drawable.snow2,R.drawable.snow3)
 
-    private fun randomSnow():Int{
-        return snowList[Random(System.currentTimeMillis()).nextInt(0,snowList.size)]
+    val snowList = arrayListOf<Int>(R.drawable.snow1, R.drawable.snow2, R.drawable.snow3)
+
+    private fun randomSnow(): Int {
+        return snowList[Random(System.currentTimeMillis()).nextInt(0, snowList.size)]
     }
 
-    private fun startSnow(view:ImageView){
+    private fun startSnow(view: ImageView) {
         view.setImageResource(randomSnow())
-        view.scaleType=ImageView.ScaleType.FIT_XY
-        bubbleContainView.addView(view, randomImageLayoutParams())
-        val translationY = getScreenHeight(this)
-        val animator = ObjectAnimator.ofFloat(view, "translationY", 0f,  translationY.toFloat())
+        view.scaleType = ImageView.ScaleType.FIT_XY
+        rootContainView.addView(view, randomImageLayoutParams())
+        val translationY = screenHeight
+        val animator = ObjectAnimator.ofFloat(view, "translationY", 0f, translationY.toFloat())
         animator.duration = randomTime()
 //        animator.interpolator = LinearInterpolator()
         animator.addListener(object : Animator.AnimatorListener {
@@ -227,7 +216,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onAnimationEnd(animation: Animator?) {
                 view.visibility = View.GONE
-                bubbleContainView.removeView(view)
+                rootContainView.removeView(view)
             }
 
             override fun onAnimationCancel(animation: Animator?) {
@@ -242,21 +231,18 @@ class MainActivity : AppCompatActivity() {
         animator.start()
     }
 
-    private fun randomTime():Long{
-        return Random(System.currentTimeMillis()).nextLong(5000,10000)
+    private fun randomTime(): Long {
+        return Random(System.currentTimeMillis()).nextLong(5000, 10000)
     }
 
-    /**
-     * 获取屏幕宽度
-     */
-    private fun getScreenWidth(context: Context): Int {
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        return wm.defaultDisplay.width
+    private val screenWith: Int by lazy {
+        val wm = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        wm.defaultDisplay.width
     }
 
-    private fun getScreenHeight(context: Context): Int {
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        return wm.defaultDisplay.height
+    private val screenHeight: Int by lazy {
+        val wm = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        wm.defaultDisplay.height
     }
 
 }
